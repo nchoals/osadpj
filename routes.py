@@ -25,6 +25,9 @@ def login():
 def courses():
     return render_template('courses.html')
 
+@app.route('/chatbot')
+def chatbot():
+    return render_template('chatbot.html')
 
 @app.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
