@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocketIO Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+    <h1>SocketIO Test</h1>
+
+    <script>
+        // Connect to the SocketIO server
+        const socket = io.connect('http://127.0.0.1:8080');  // Change the URL to your server's URL
+
+        // Listen for messages from the server
+        socket.on('message', function (data) {
+            console.log('Received message:', data);
+        });
+
+        // Listen for the 'connect' event
+        socket.on('connect', function () {
+            console.log('Connected to the server!');
+        });
+
+        // Listen for the 'disconnect' event
+        socket.on('disconnect', function () {
+            console.log('Disconnected from the server!');
+        });
+
+        // Simulate sending a message to the server
+        function sendMessage() {
+            const message = prompt('Enter a message:');
+            socket.emit('message', { data: message });
+        }
+
+        // Simulate disconnecting from the server
+        function disconnect() {
+            socket.disconnect();
+        }
+    </script>
+</body>
+</html>

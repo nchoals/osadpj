@@ -259,7 +259,10 @@ body {
       return `${h.slice(-2)}:${m.slice(-2)}`;
     }
 
-
+  socket.on('message', function(data) {
+      console.log('Received message:', data);
+      // Rest of your code
+  });
 
   </script>
 

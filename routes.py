@@ -1,7 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from models import db, User
 from Form import CreateUserForm
 # from chatbot import chatbot
+from flask_login import current_user, login_required
+from flask_socketio import SocketIO, emit, join_room, send
+
 
 
 app = Flask(__name__)
@@ -12,6 +15,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'mockingjay_2918'
 db.init_app(app)
 
+socketio = SocketIO(app)
+rooms = {}
 
 @app.route('/')
 def index():
@@ -74,3 +79,56 @@ def forgot_password():
 @app.route('/profile')
 def profile():
     return render_template('profile.html')
+
+
+# ================= CHATROOM =======================
+@app.route('/chatroom')
+def chatroom():
+    users = User.query.all()
+    return render_template('chatroom.html', users=users)
+
+@socketio.on('message')
+def handle_message(data):
+    user_id = request.sid
+    room = user_id  # Use user_id as the room
+    name = user_id
+
+    if room not in rooms:
+        rooms[room] = {'members': 1, 'messages': []}  # Initialize the room if it doesn't exist
+    else:
+        rooms[room]['members'] += 1  # Increment member count if the room already exists
+
+    content = {'name': name, 'message': data['data']}
+    send(content, to=room)
+    rooms[room]['messages'].append(content)
+
+@socketio.on('connect')
+def handle_connect():
+    user_id = request.sid
+    room = user_id  # Use user_id as the room
+    name = user_id
+
+    if room not in rooms:
+        rooms[room] = {'members': 1, 'messages': []}  # Initialize the room if it doesn't exist
+    else:
+        rooms[room]['members'] += 1  # Increment member count if the room already exists
+
+    join_room(room)
+    send({'name': name, 'message': 'has entered the room'}, to=room)
+    rooms[room]['members'] += 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
