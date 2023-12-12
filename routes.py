@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from models import db, User
 from Form import CreateUserForm
+# from chatbot import chatbot
 
 
 app = Flask(__name__)
@@ -28,6 +29,11 @@ def courses():
 @app.route('/chatbot')
 def chatbot():
     return render_template('chatbot.html')
+
+@app.route("/get")
+def get_bot_response():
+    userText = request.args.get('msg')
+    return str(chatbot.get_response(userText))
 
 @app.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
