@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form>
+<div class="px-5 py-5" style="width: 100%; height: 100%; position: relative; background: white">
+<div style="background: white; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border: 1px black solid">
+    <div class="form-group my-2 ml-3">
+    <h2 class="font-weight-bold p-4">Get Started With Creating Your Course!</h2>
+    <div class="bg-gray-200 border border-dark p-3 mx-5 my-3">
+    <p class="fs-4">Course Structure</p>
+    <label for="exampleFormControlTextarea1">Title</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea>
+    <label for="exampleFormControlTextarea1">Learning Objectives?</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="2"></textarea>
+    <label for="exampleFormControlTextarea1">Prerequisite knowledge?</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="2"></textarea>
+    <label for="exampleFormControlTextarea1">Intended learners?</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="2"></textarea>
+    </div>
+    </div>
+    <div class="bg-gray-200 border border-dark p-3 mx-5 my-5">
+    <p class="fs-4">Curriculum</p>
+
+            <div id="curriculum">
+                <!-- Curriculum sections will be dynamically added here -->
+            </div>
+
+            <button type="button" class="btn btn-primary mt-3" onclick="addSection()">Add Section</button>
+
+            <button type="submit" class="btn btn-success mt-3">Create Course</button>
+        <hr>
+    <div class="form-group">
+    <label for="exampleFormControlFile1">Example file input</label>
+    <input type="file" class="form-control-file" id="exampleFormControlFile1">
+    </div>
+    </div>
+</div>
+</div>
+</form>
+
+<script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+<script>
+    // JavaScript code for adding curriculum sections dynamically
+    let sectionCount = 0;
+
+    function addSection() {
+        sectionCount++;
+
+        const sectionHtml = `
+            <div class="mb-3">
+                <label for="section${sectionCount}" class="form-label">Section Name</label>
+                <input type="text" class="form-control" id="section${sectionCount}" name="section${sectionCount}" required>
+
+                <div class="mt-2">
+                    <button type="button" class="btn btn-secondary" onclick="addContent(${sectionCount})">Add Content</button>
+                </div>
+
+                <div id="sectionContent${sectionCount}">
+                    <!-- Content items will be dynamically added here -->
+                </div>
+            </div>
+        `;
+
+        document.getElementById('curriculum').insertAdjacentHTML('beforeend', sectionHtml);
+    }
+
+    function addContent(sectionNumber) {
+        const contentHtml = `
+            <div class="mb-2">
+                <label for="content${sectionNumber}_1" class="form-label">Content Name</label>
+                <input type="text" class="form-control" id="content${sectionNumber}_1" name="content${sectionNumber}_1" required>
+            </div>
+        `;
+
+        document.getElementById(`sectionContent${sectionNumber}`).insertAdjacentHTML('beforeend', contentHtml);
+    }
+</script>
+{% endblock %}
