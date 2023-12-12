@@ -21,11 +21,17 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     return render_template('login.html')
+##------------------ NICHOLAS --------------------
 
 @app.route('/courses', methods=['GET', 'POST'])
 def courses():
     return render_template('courses.html')
 
+@app.route('/createc', methods=['GET', 'POST'])
+def createc():
+    return render_template('createc.html')
+
+##------------------------------------------------
 @app.route('/chatbot')
 def chatbot():
     return render_template('chatbot.html')
