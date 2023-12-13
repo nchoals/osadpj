@@ -1,57 +1,23 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container-xxl py-5">
-    <div class="container">
-        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-            <h6 class="section-title bg-white text-center text-primary px-3">A broad selection of courses</h6>
-            <h1 class="mb-5">Courses</h1>
-        </div>
-    <div class="row g-4">
-        <div class="col-lg-3 col-md-6 mt-5 wow fadeInUp" data-wow-delay="0.5s">
-            <div class="team-item bg-light">
-                <div class="overflow-hidden">
-                    <img class="img-fluid" src="{{ url_for('static', filename='img/team-3.jpg') }}" alt="">
-                </div>
-                <div class="text-center p-4">
-                    <h5 class="mb-0">Math</h5>
-                </div>
-            </div>
-        </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Courses</title>
+</head>
+<body>
+    <h2>All Courses</h2>
 
-        <div class="col-lg-3 col-md-6 mt-5 wow fadeInUp" data-wow-delay="0.5s">
-            <div class="team-item bg-light">
-                <div class="overflow-hidden">
-                    <img class="img-fluid" src="{{ url_for('static', filename='img/team-3.jpg') }}" alt="">
-                </div>
-                <div class="text-center p-4">
-                    <h5 class="mb-0">Physics</h5>
-                </div>
-            </div>
+    {% for course in courses %}
+        <div>
+            <p><strong>Title:</strong> {{ course.title }}</p>
+            <p><strong>Description:</strong> {{ course.description }}</p>
+            <p><strong>Learning Objectives:</strong> {{ course.objectives }}</p>
+            <p><strong>Prerequisite Knowledge:</strong> {{ course.prerequisite }}</p>
+            <p><strong>Intended Learners:</strong> {{ course.learners }}</p>
+            <hr>
         </div>
-
-        <div class="col-lg-3 col-md-6 mt-5 wow fadeInUp" data-wow-delay="0.5s">
-            <div class="team-item bg-light">
-                <div class="overflow-hidden">
-                    <img class="img-fluid" src="{{ url_for('static', filename='img/team-3.jpg') }}" alt="">
-                </div>
-                <div class="text-center p-4">
-                    <h5 class="mb-0">Economics</h5>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mt-5 wow fadeInUp" data-wow-delay="0.5s">
-            <div class="team-item bg-light">
-                <div class="overflow-hidden">
-                    <img class="img-fluid" src="{{ url_for('static', filename='img/team-3.jpg') }}" alt="">
-                </div>
-                <div class="text-center p-4">
-                    <h5 class="mb-0">Computing</h5>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
+    {% endfor %}
+</body>
 {% endblock %}

@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from models import db, User
 from Form import CreateUserForm
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 # from chatbot import chatbot
 from flask_login import current_user, login_required
 from flask_socketio import SocketIO, emit, join_room, send
@@ -18,6 +20,12 @@ db.init_app(app)
 socketio = SocketIO(app)
 rooms = {}
 
+uri = 'mongodb+srv://nicholaspoh05:Borderlands2232!!@Cluster0.8cesyej.mongodb.net/Cluster0?retryWrites=true&w=majority'
+client = MongoClient(uri, server_api=ServerApi('1'))
+db = client['Cluster0']  # Replace 'Cluster0' with your actual database name
+courses_collection = db['courses']
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -28,13 +36,39 @@ def login():
     return render_template('login.html')
 ##------------------ NICHOLAS --------------------
 
-@app.route('/courses', methods=['GET', 'POST'])
-def courses():
-    return render_template('courses.html')
-
 @app.route('/createc', methods=['GET', 'POST'])
 def createc():
+    if request.method == 'POST':
+        # Retrieve form data
+        title = request.form['title']
+        description = request.form['description']
+        objectives = request.form['objectives']
+        prerequisite = request.form['prerequisite']
+        learners = request.form['learners']
+
+        # Save the data to MongoDB
+        course_data = {
+            'title': title,
+            'description': description,
+            'objectives': objectives,
+            'prerequisite': prerequisite,
+            'learners': learners
+        }
+        courses_collection.insert_one(course_data)
+
+        # Redirect to the 'courses.html' page with the form data
+        return redirect(url_for('courses'))
+
+    # Render the 'createc.html' page for GET requests
     return render_template('createc.html')
+
+@app.route('/courses')
+def courses():
+    # Retrieve all courses from MongoDB
+    all_courses = courses_collection.find()
+
+    # Render the 'courses.html' page with the retrieved courses
+    return render_template('courses.html', courses=all_courses)
 
 ##------------------------------------------------
 @app.route('/chatbot')
